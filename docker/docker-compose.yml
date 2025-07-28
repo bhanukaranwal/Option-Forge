@@ -1,0 +1,59 @@
+# docker/docker-compose.yml
+
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: optionforge-web
+    command: gunicorn --bind 0.0.0.0:5000 --workers 4 --threads 4 "optionforge:create_app()"
+    volumes:
+      - ../backend:/home/appuser/app
+      - ../instance:/home/appuser/instance
+    ports:
+      - "5000:5000"
+    env_file:
+      - ../.env
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: optionforge-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../frontend/src:/app/src
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: optionforge-worker
+    command: celery -A optionforge.celery worker --loglevel=info
+    volumes:
+      - ../backend:/home/appuser/app
+      - ../instance:/home/appuser/instance
+    env_file:
+      - ../.env
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  redis:
+    image: "redis:alpine"
+    container_name: optionforge-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+volumes:
+  instance:
