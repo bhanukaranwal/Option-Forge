@@ -1,0 +1,26 @@
+### OptionForge: Quick Setup Guide
+
+Here are the essential steps to get the OptionForge platform running on your local machine using Docker.
+
+1.  **Clone the Repository**
+    Clone the project to your local machine and navigate into the project's root directory.
+
+2.  **Configure Your Environment**
+    Create a `.env` file in the project root by copying the example file: `cp .env.example .env`. The default values are pre-configured for local development and do not need to be changed to get started.
+
+3.  **Build & Run the Application**
+    From the root directory, execute the following command. This will build the Docker images for the backend and frontend, and start all necessary services.
+    ```bash
+    docker-compose up --build
+    ```
+
+4.  **Access the Platform**
+    Once the containers are running, you can access the application:
+    * **Frontend App:** [http://localhost:5173](http://localhost:5173)
+    * **API Docs (Swagger):** [http://localhost:5000/docs](http://localhost:5000/docs)
+
+5.  **Seed the Database (Optional)**
+    To populate the database with sample strategies and 2 years of historical options data for SPY and QQQ, run the following command in a new terminal. (Note: This process can take a significant amount of time.)
+    ```bash
+    docker-compose exec web python scripts/seed_data.py
+    ```
