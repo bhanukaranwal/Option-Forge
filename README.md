@@ -1,71 +1,146 @@
-# OptionForge
+<div align="center">
+  <img src="https://placehold.co/600x300/1e293b/3b82f6?text=OptionForge&font=raleway" alt="OptionForge Banner">
+  <h1 align="center">OptionForge</h1>
+  <p align="center">
+    A professional-grade platform for designing, backtesting, and analyzing complex options strategies.
+  </p>
+  <p align="center">
+    <a href="#key-features"><strong>Features</strong></a> ·
+    <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
+    <a href="#getting-started"><strong>Getting Started</strong></a> ·
+    <a href="#api-documentation"><strong>API Docs</strong></a> ·
+    <a href="#contributing"><strong>Contributing</strong></a>
+  </p>
+  <p align="center">
+    <img src="https://github.com/<your-username>/optionforge/actions/workflows/ci.yml/badge.svg" alt="CI Status">
+    <img src="https://img.shields.io/badge/python-3.11-blue.svg" alt="Python Version">
+    <img src="https://img.shields.io/badge/react-18-blue.svg" alt="React Version">
+    <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+  </p>
+</div>
 
-**OptionForge** is a modern, professional-grade web platform for designing, back-testing, and analyzing multi-leg options strategies. It provides a powerful, intuitive interface for traders to validate their ideas against historical data before risking capital.
+---
 
-![OptionForge Screenshot (Conceptual)](https://placehold.co/1200x600/1a202c/ffffff?text=OptionForge%20Dashboard)
+**OptionForge** is an open-source web application built for sophisticated options traders. It provides a powerful, data-driven environment to move from a strategy idea to a fully-validated model, ready for paper or live trading. Whether you're exploring a simple covered call or a complex, multi-leg, delta-neutral position, OptionForge gives you the tools to understand its performance and risk profile deeply.
 
 ## Key Features
 
-* **Visual Strategy Builder:** Drag-and-drop interface to construct complex multi-leg options strategies.
-* **Powerful Backtest Engine:** Vectorized engine using NumPy/Pandas for high-speed analysis. Supports Black-Scholes and Monte Carlo pricing models.
-* **In-Depth Analytics:** Comprehensive performance metrics including P/L curves, Sharpe/Sortino ratios, max drawdown, and Greek exposures over time.
-* **Interactive Payoff Diagrams:** Instantly visualize the risk/reward profile of any strategy at expiration.
-* **Portfolio-Level Testing:** Combine multiple strategies and analyze their correlated performance.
-* **Forward Testing:** Paper-trade your strategies with simulated live market data.
-* **Secure & Scalable:** Built with a modern tech stack, featuring JWT-based authentication, background task processing, and a containerized architecture for easy deployment.
+| Feature | Description | Status |
+| :--- | :--- | :--- |
+| **Visual Strategy Builder** | Construct strategies with an intuitive UI. Add, remove, and configure legs (calls/puts, buy/sell, quantity). | ✅ |
+| **Advanced Backtesting Engine** | Vectorized engine using `NumPy`/`Pandas` for speed. Choose between Black-Scholes and Monte Carlo pricing. | ✅ |
+| **Interactive Payoff Diagrams** | Instantly visualize a strategy's P/L at expiration. Hover to see break-even points and potential profit/loss. | ✅ |
+| **Comprehensive Metrics** | Go beyond P/L. Analyze Sharpe & Sortino ratios, max drawdown, profit factor, Calmar ratio, and win rate. | ✅ |
+| **Greek Analysis** | Track and visualize how your position's Delta, Gamma, Theta, and Vega evolve over the life of the backtest. | ✅ |
+| **Portfolio Simulation** | Combine multiple strategies into a single portfolio to analyze correlations and the combined equity curve. | ✅ |
+| **Data Provider Layer** | Starts with `yfinance` for free, accessible data. Built to be extensible for higher-fidelity providers like Polygon.io. | ✅ |
+| **Forward Testing Mode** | Paper trade your validated strategies using a simulated live quote stream via WebSockets. | 🚧 In-Progress |
+| **Modern & Secure Auth** | JWT-based API authentication with secure user registration and login flows. | ✅ |
+| **Dark/Light Theme** | A comfortable viewing experience in any lighting condition, with a seamless theme toggle. | ✅ |
+
+### Sneak Peek
+
+<div align="center">
+  <img src="https://placehold.co/800x450/1e293b/ffffff?text=Dashboard+View" alt="Dashboard Screenshot" style="border-radius: 8px; margin: 10px;">
+  <img src="https://placehold.co/800x450/1e293b/ffffff?text=Strategy+Builder+UI" alt="Strategy Builder Screenshot" style="border-radius: 8px; margin: 10px;">
+</div>
 
 ## Tech Stack
 
-* **Backend:** Python 3.11, Flask, SQLAlchemy, Celery, Redis
-* **Frontend:** React 18, TypeScript, Vite, Tailwind CSS, Plotly.js
-* **Database:** SQLite (dev), PostgreSQL (prod)
+OptionForge is built with a modern, scalable, and containerized architecture.
+
+  +-------------------------+
+  |      Browser (User)     |
+  |   (React + TypeScript)  |
+  +-------------+-----------+
+                |
+                | (HTTPS)
+                |
+  +-------------v-----------+
+  |   NGINX (Frontend Host)   |
+  +-------------+-----------+
+                |
+                | (API Calls)
+                |
++-------------------v-------------------+       +-----------------+|      Gunicorn (Flask Backend)         |------>|      Redis      || (Python + SQLAlchemy + Celery Client) |<------| (Celery Broker) |+-------------------+-------------------+       +-----------------+|| (DB Queries)|+-------------v-----------+|  PostgreSQL / SQLite    |+-------------------------+
+* **Frontend:** React 18 (with Vite), TypeScript, Tailwind CSS, Plotly.js
+* **Backend:** Python 3.11, Flask, SQLAlchemy
+* **Database:** PostgreSQL (production), SQLite (development)
+* **Async Tasks:** Celery for running intensive backtests in the background.
+* **Caching/Message Broker:** Redis
 * **Containerization:** Docker & Docker Compose
-* **Testing:** Pytest, Vitest
-* **CI/CD:** GitHub Actions
 
-## Quick Start & Setup
+## Getting Started
 
-Follow these steps to get the OptionForge platform running locally for development.
+Follow these instructions to set up your local development environment.
+
+### Prerequisites
+
+* [Docker](https://www.docker.com/get-started)
+* [Docker Compose](https://docs.docker.com/compose/install/)
+* `git` for cloning the repository.
+* A code editor like [VS Code](https://code.visualstudio.com/).
+
+### Installation & Launch
 
 1.  **Clone the Repository:**
     ```bash
-    git clone <repository-url>
+    git clone [https://github.com/](https://github.com/)<your-username>/optionforge.git
     cd optionforge
     ```
 
-2.  **Configure Environment:**
-    Copy the example environment file and customize it as needed.
+2.  **Configure Your Environment:**
+    Create a `.env` file for the backend and a separate one for the frontend.
+    
+    *Backend:*
     ```bash
+    # In the project root directory
     cp .env.example .env
     ```
-    *Note: The default `.env` is configured for local development with Docker and SQLite.*
+    The defaults are fine for local development.
 
-3.  **Build and Run with Docker:**
-    Make sure you have Docker and Docker Compose installed. Then, run:
+    *Frontend:*
+    ```bash
+    # In the frontend directory
+    cd frontend
+    echo "VITE_API_BASE_URL=http://localhost:5000/api" > .env
+    cd .. 
+    ```
+
+3.  **Build and Run with Docker Compose:**
+    From the project's root directory, run:
     ```bash
     docker-compose up --build
     ```
-    This command will build the images for the backend and frontend, and start the `web`, `worker`, and `redis` services.
+    This command will build the images, start the containers, and link them together.
 
 4.  **Access the Application:**
-    * **Frontend:** Open your browser to [http://localhost:5173](http://localhost:5173)
-    * **Backend API:** The API will be available at [http://localhost:5000](http://localhost:5000)
-    * **API Docs (Swagger UI):** [http://localhost:5000/docs](http://localhost:5000/docs)
+    * **💻 Frontend App:** [http://localhost:5173](http://localhost:5173)
+    * **⚙️ Backend API:** [http://localhost:5000](http://localhost:5000)
+    * **📚 API Docs (Swagger UI):** [http://localhost:5000/docs](http://localhost:5000/docs)
 
-5.  **Seed the Database (Optional):**
-    To populate the database with sample data (SPY/QQQ option chains and example strategies), run the seed script:
+5.  **Seed the Database (Highly Recommended):**
+    To make the app useful, populate it with sample strategies and historical options data. Open a **new terminal window** and run:
     ```bash
-    docker-compose exec web python -m scripts.seed_data
+    docker-compose exec web python scripts/seed_data.py
     ```
-    *This may take a significant amount of time as it downloads several years of options data.*
+    > **Warning:** This will download several gigabytes of data and may take a very long time (30+ minutes) depending on your internet connection.
 
-## Environment Variables
+## Project Structure
 
-The following environment variables are used for configuration. They should be placed in a `.env` file in the project root.
+A brief overview of the repository layout.
 
-backend/config.pyFLASK_ENV=developmentSECRET_KEY=a_very_secret_key_that_should_be_changedDATABASE_URL=sqlite:///../instance/optionforge.dbCELERY_BROKER_URL=redis://redis:6379/0CELERY_RESULT_BACKEND=redis://redis:6379/0YFINANCE_TICKERS="SPY QQQ"frontend/.envVITE_API_BASE_URL=http://localhost:5000
+optionforge/├── .github/                # GitHub Actions CI/CD workflows├── backend/│   ├── optionforge/        # Main Flask application package│   │   ├── api/            # API blueprints (auth, strategies, etc.)│   │   ├── backtester/     # Core backtesting engine and logic│   │   ├── main/           # Core application routes│   │   ├── models.py       # SQLAlchemy DB models│   │   └── init.py     # Application factory│   ├── scripts/            # Helper scripts (e.g., seed_data.py)│   ├── tests/              # Backend tests│   └── requirements.txt    # Python dependencies├── docker/│   ├── Dockerfile          # Backend Dockerfile│   └── docker-compose.yml  # Docker Compose configuration├── frontend/│   ├── public/             # Static assets│   ├── src/                # React source code│   │   ├── api/            # API client setup│   │   ├── components/     # Reusable UI components│   │   ├── context/        # React context providers (Auth, Theme)│   │   ├── hooks/          # Custom React hooks│   │   ├── layouts/        # Main application layout│   │   ├── pages/          # Page components│   │   └── ...│   ├── Dockerfile          # Frontend Dockerfile (for NGINX)│   └── package.json        # Node.js dependencies└── README.md               # You are here!
 ## API Documentation
 
-The ReST/JSON API is documented using the OpenAPI 3 standard. An interactive Swagger UI is available at the `/docs` endpoint when the application is running.
+The backend provides a ReST/JSON API that is documented using the OpenAPI 3.0 standard. When the application is running, you can access an interactive Swagger UI to explore and test the API endpoints.
 
-A Postman collection can be generated from the `openapi.json` file available at `/openapi.json`.
+➡️ **[http://localhost:5000/docs](http://localhost:5000/docs)**
+
+## Contributing
+
+We welcome contributions from the community! Whether it's a bug fix, a new feature, or documentation improvements, your help is appreciated. Please see our [Contributing Guide](CONTRIBUTING.md) (placeholder) for more details on how to get started.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
